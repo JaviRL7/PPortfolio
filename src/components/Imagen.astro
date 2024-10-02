@@ -1,0 +1,26 @@
+---
+// src/components/Imagen.astro
+---
+<div class="background-image">
+    <img src="/javi2.jpeg" alt="Imagen de fondo" />
+    <p style="color: white; position: absolute; top: 10px; left: 10px;">Imagen cargada</p> <!-- Mensaje de prueba -->
+  </div>
+  
+  <style>
+  .background-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1; /* Asegúrate de que la imagen esté detrás del contenido */
+      overflow: hidden;
+  }
+  
+  .background-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* Mantiene la proporción de la imagen */
+  }
+  </style>
+  
