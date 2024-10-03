@@ -1,18 +1,18 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Texto from '../components/Texto.astro';
-import Imagen from '../components/Imagen.astro';
 import Navbar from '../components/Navbar.astro';
+import Imagen from '../components/Imagen.astro';
 ---
 
 <Layout title="Welcome to Astro.">
   <main>
-    <Texto />
-    <div id="image" style="display: none;">
-      <Imagen />
-    </div>
-    <div id="navbar" style="display: none;">
+    <Texto id="texto-principal" />
+    <div id="navbar" class="navbar-hidden">
       <Navbar />
+    </div>
+    <div id="background-image" class="image-hidden">
+      <Imagen src="/public/javi2.jpeg" alt="Descripción de la imagen" />
     </div>
   </main>
 </Layout>
@@ -20,30 +20,88 @@ import Navbar from '../components/Navbar.astro';
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
-      const imageElement = document.querySelector('#image');
-      if (imageElement instanceof HTMLElement) {
-        imageElement.style.display = 'block';
+      const navbarElement = document.querySelector('#navbar');
+      if (navbarElement instanceof HTMLElement) {
+        navbarElement.classList.remove('navbar-hidden');
+        navbarElement.classList.add('navbar-visible');
       }
       setTimeout(() => {
-        const navbarElement = document.querySelector('#navbar');
-        if (navbarElement instanceof HTMLElement) {
-          navbarElement.style.display = 'block';
+        const imageElement = document.querySelector('#background-image');
+        if (imageElement instanceof HTMLElement) {
+          imageElement.classList.remove('image-hidden');
+          imageElement.classList.add('image-visible');
         }
-      }, 1000); // Delay de 1 segundo para el navbar
-    }, 3000); // Delay de 3 segundos para la imagen
+      }, 1000); // Delay de 1 segundo para la imagen
+    }, 1000); // Delay de 1 segundo para el navbar
+  });
+
+  window.addEventListener('scroll', () => {
+    const scrollPosition = window.scrollY;
+    const textoElement = document.querySelector('#texto-principal');
+    const imageElement = document.querySelector('#background-image img');
+
+    if (scrollPosition > 100) { // Ajusta este valor según sea necesario
+      if (textoElement) {
+        textoElement.innerHTML = 'Soy desarrollador';
+      }
+      if (imageElement instanceof HTMLImageElement) {
+        imageElement.src = '/public/javi3.jpeg'; // Cambia a la nueva imagen
+      }
+    }
   });
 </script>
 
 <style>
+  @keyframes slide-down {
+    0% {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  /* Estilo inicial oculto del navbar */
+  .navbar-hidden {
+    opacity: 0;
+    transform: translateY(-100%);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+
+  /* Estilo para hacer visible el navbar con la animación */
+  .navbar-visible {
+    animation: slide-down 0.5s ease-out forwards;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+
+  /* Estilo inicial oculto de la imagen */
+  .image-hidden {
+    opacity: 0;
+  }
+
+  /* Estilo para hacer visible la imagen con la animación */
+  .image-visible {
+    opacity: 1;
+    transition: opacity 0.5s ease-out;
+  }
+
   main {
     margin: auto;
     padding: 1rem;
-    width: 800px;
+    width: 80%; /* Aproximadamente 800px de ancho */
     max-width: calc(100% - 2rem);
     color: white;
     font-size: 20px;
     line-height: 1.6;
-    position: relative; /* Para posicionar correctamente la imagen de fondo */
-    overflow: hidden; /* Evita el desbordamiento de la imagen de fondo */
+    position: relative;
+    overflow: hidden;
   }
 </style>

@@ -1,26 +1,19 @@
 ---
-// src/components/Imagen.astro
+const { src, alt } = Astro.props;
 ---
-<div class="background-image">
-    <img src="/javi2.jpeg" alt="Imagen de fondo" />
-    <p style="color: white; position: absolute; top: 10px; left: 10px;">Imagen cargada</p> <!-- Mensaje de prueba -->
-  </div>
-  
-  <style>
+
+<style>
   .background-image {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1; /* Asegúrate de que la imagen esté detrás del contenido */
-      overflow: hidden;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%; /* Aproximadamente 800px de ancho */
+    height: 60%; /* Aproximadamente 500px de alto */
+    object-fit: cover;
+    object-position: center;
+    z-index: -1; /* Para que esté detrás del contenido */
   }
-  
-  .background-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover; /* Mantiene la proporción de la imagen */
-  }
-  </style>
-  
+</style>
+
+<img src={src} alt={alt} class="background-image" />

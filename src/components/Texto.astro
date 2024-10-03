@@ -2,29 +2,36 @@
 // src/components/Texto.astro
 ---
 <div class="text-animation">
-    {Array.from("Hola, soy Javi").map((char, index) => (
-      <span style={`animation-delay: ${index * 0.1}s;`}>{char}</span>
-    ))}
-  </div>
-  
-  <style>
-  .text-animation {
-    font-size: 2rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+  {Array.from("Hola, soy Javi").map((char, index) => (
+    <span style={`animation-delay: ${index * 0.1}s;`} class="char">{char === " " ? '\u00A0' : char}</span>
+  ))}
+</div>
+
+<style>
+/* Fuente Inter */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+
+.text-animation {
+  font-family: 'Inter', sans-serif; /* Aplicar la fuente Inter */
+  font-size: 4rem; /* Aumentar el tamaño de la fuente */
+  display: flex;
+  justify-content: flex-start; /* Alinea hacia la izquierda */
+  align-items: center;
+  height: 100vh;
+  padding-left: 10%; /* Mover más a la izquierda */
+}
+
+.text-animation span {
+  opacity: 0;
+  animation: fadeIn 0.5s forwards;
+  display: inline-block; /* Para asegurarse de que se respete el espaciado */
+}
+
+/* Animación de aparición de letras */
+@keyframes fadeIn {
+  to {
+    opacity: 1;
   }
-  
-  .text-animation span {
-    opacity: 0;
-    animation: fadeIn 0.5s forwards;
-  }
-  
-  @keyframes fadeIn {
-    to {
-      opacity: 1;
-    }
-  }
-  </style>
+}
+</style>
   
