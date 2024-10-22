@@ -5,103 +5,122 @@ import Navbar from '../components/Navbar.astro';
 import Imagen from '../components/Imagen.astro';
 ---
 
-<Layout title="Welcome to Astro.">
-  <main>
-    <Texto id="texto-principal" />
-    <div id="navbar" class="navbar-hidden">
+<Layout title="Welcome to Astro">
+  <main class="relative">
+    <!-- Texto principal animado -->
+    <Texto id="main-text" />
+    <!-- Imagen de fondo detrás del texto -->
+    <div id="background-image" class="image-visible absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70%] h-[70%]">
+      <Imagen src="/javi3.jpg" alt="Imagen de fondo" />
+    </div>
+    <!-- Navbar que aparecerá después de la imagen -->
+    <div id="navbar" class="navbar-visible">
       <Navbar />
     </div>
-    <div id="background-image" class="image-hidden">
-      <Imagen src="/public/javi2.jpeg" alt="Descripción de la imagen" />
-    </div>
+    <!-- Secciones adicionales -->
+    <section id="section-2" class="hidden">
+      <div class="text-animation relative z-20">
+        <h1>Ejemplo 2</h1>
+        
+        
+      </div>
+      <div class="image-visible absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70%] h-[70%]">
+        <img src="javi2.jpg" alt="Imagen de fondo 2" class="object-cover w-full h-full" />
+      </div>
+    </section>
+    <section id="section-3" class="hidden">
+      <div class="text-animation relative z-20">
+        <h1>Ejemplo 3</h1>
+        <img src="/javi3.jpg" alt="Imagen de fondo 3" class="object-cover w-full h-full" />
+      </div>
+    </section>
   </main>
 </Layout>
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    setTimeout(() => {
-      const navbarElement = document.querySelector('#navbar');
-      if (navbarElement instanceof HTMLElement) {
-        navbarElement.classList.remove('navbar-hidden');
-        navbarElement.classList.add('navbar-visible');
-      }
-      setTimeout(() => {
-        const imageElement = document.querySelector('#background-image');
-        if (imageElement instanceof HTMLElement) {
-          imageElement.classList.remove('image-hidden');
-          imageElement.classList.add('image-visible');
-        }
-      }, 1000); // Delay de 1 segundo para la imagen
-    }, 1000); // Delay de 1 segundo para el navbar
-  });
+    let currentSection = 0; // Mantiene el seguimiento de la sección actual
+    const sections = [
+      { id: 'background-image', imgSrc: '/javi2.jpg', bgColor: '#007bff', textColor: '#fff', text: 'Hola, soy Javi' },
+      { id: 'section-2', imgSrc: '/javi1.jpg', bgColor: '#6c757d', textColor: '#fff', text: 'Ejemplo 2' },
+      { id: 'section-3', imgSrc: '/javss.jpg', bgColor: '#28a745', textColor: '#fff', text: 'Ejemplo 3' },
+    ];
 
-  window.addEventListener('scroll', () => {
-    const scrollPosition = window.scrollY;
-    const textoElement = document.querySelector('#texto-principal');
-    const imageElement = document.querySelector('#background-image img');
+    const changeSection = (direction: number) => {
+      currentSection += direction;
+      if (currentSection < 0) currentSection = 0;
+      if (currentSection >= sections.length) currentSection = sections.length - 1;
 
-    if (scrollPosition > 100) { // Ajusta este valor según sea necesario
-      if (textoElement) {
-        textoElement.innerHTML = 'Soy desarrollador';
+      const section = sections[currentSection];
+      const mainContent = document.querySelector('main');
+      const navbar = document.querySelector('#navbar');
+      const backgroundImage = document.querySelector('#background-image img');
+      const mainText = document.querySelector('#main-text h1');
+
+      if (mainContent instanceof HTMLElement && navbar instanceof HTMLElement && backgroundImage instanceof HTMLImageElement && mainText instanceof HTMLElement) {
+        mainContent.style.backgroundColor = section.bgColor;
+        navbar.style.color = section.textColor;
+        mainText.textContent = section.text;
+        backgroundImage.src = section.imgSrc;
+
+        sections.forEach((sec, index) => {
+          const secElement = document.getElementById(sec.id);
+          if (secElement) {
+            secElement.classList.toggle('hidden', index !== currentSection);
+          }
+        });
       }
-      if (imageElement instanceof HTMLImageElement) {
-        imageElement.src = '/public/javi3.jpeg'; // Cambia a la nueva imagen
+    };
+
+    window.addEventListener('wheel', (event) => {
+      if (event.deltaY > 0) {
+        changeSection(1); // Desplazar hacia abajo
+      } else {
+        changeSection(-1); // Desplazar hacia arriba
       }
-    }
+    });
+
+    let touchStartY = 0;
+    window.addEventListener('touchstart', (event) => {
+      touchStartY = event.touches[0].clientY;
+    });
+
+    window.addEventListener('touchend', (event) => {
+      const touchEndY = event.changedTouches[0].clientY;
+      if (touchEndY < touchStartY) {
+        changeSection(1); // Deslizar hacia arriba
+      } else {
+        changeSection(-1); // Deslizar hacia abajo
+      }
+    });
   });
 </script>
 
 <style>
-  @keyframes slide-down {
-    0% {
-      transform: translateY(-100%);
-      opacity: 0;
-    }
-    100% {
-      transform: translateY(0);
-      opacity: 1;
-    }
+  .hidden {
+    display: none;
   }
 
-  /* Estilo inicial oculto del navbar */
-  .navbar-hidden {
-    opacity: 0;
-    transform: translateY(-100%);
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-  }
-
-  /* Estilo para hacer visible el navbar con la animación */
   .navbar-visible {
-    animation: slide-down 0.5s ease-out forwards;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
+    opacity: 1;
+    transition: opacity 1s ease-in-out;
   }
 
-  /* Estilo inicial oculto de la imagen */
-  .image-hidden {
-    opacity: 0;
-  }
-
-  /* Estilo para hacer visible la imagen con la animación */
   .image-visible {
     opacity: 1;
-    transition: opacity 0.5s ease-out;
+    transition: opacity 1s ease-in-out;
+  }
+
+  .section img {
+    max-width: 100%;
+    height: auto;
   }
 
   main {
-    margin: auto;
-    padding: 1rem;
-    width: 80%; /* Aproximadamente 800px de ancho */
-    max-width: calc(100% - 2rem);
-    color: white;
-    font-size: 20px;
-    line-height: 1.6;
-    position: relative;
-    overflow: hidden;
+    transition: background-color 0.5s ease-in-out;
+  }
+
+  h1 {
+    color: inherit;
   }
 </style>

@@ -1,0 +1,54 @@
+---
+// Definimos las propiedades necesarias
+interface Props {
+  texto: string;
+  imagenSrc: string;
+  backgroundColor: string;
+  id: string;
+}
+
+const { texto, imagenSrc, backgroundColor, id } = Astro.props as Props;
+---
+
+<section id={id} class="scroll-section" style={`background-color: ${backgroundColor};`}>
+  <div class="content">
+    <div class="text">
+      {texto}
+    </div>
+    <div class="image">
+      <img src={imagenSrc} alt="Scroll Image" />
+    </div>
+  </div>
+</section>
+
+<style>
+  .scroll-section {
+    height: 100vh; /* Cada sección ocupa toda la pantalla */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 1s ease; /* Transición del color de fondo */
+  }
+
+  .content {
+    text-align: center;
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 1s ease, transform 1s ease;
+  }
+
+  .scroll-section.active .content {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .image img {
+    max-width: 80%;
+    height: auto;
+    transition: transform 0.5s ease;
+  }
+
+  .scroll-section.active .image img {
+    transform: scale(1.05);
+  }
+</style>

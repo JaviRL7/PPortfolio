@@ -1,19 +1,6 @@
 ---
+// Recibimos las propiedades desde el componente padre
 const { src, alt } = Astro.props;
 ---
 
-<style>
-  .background-image {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 80%; /* Aproximadamente 800px de ancho */
-    height: 60%; /* Aproximadamente 500px de alto */
-    object-fit: cover;
-    object-position: center;
-    z-index: -1; /* Para que esté detrás del contenido */
-  }
-</style>
-
-<img src={src} alt={alt} class="background-image" />
+<img src={src} alt={alt} class="object-cover w-full h-full" />
